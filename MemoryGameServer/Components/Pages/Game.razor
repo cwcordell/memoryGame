@@ -3,11 +3,9 @@
 
 <PageTitle>Memory Game</PageTitle>
 
-<h1>Game</h1>
+<h1>Memory Game</h1>
 <hr />
-<span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
-<span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span><br />
-<span>Attempts: @(Attempts)</span>
+
 <div class="grid-container">
     @for (int i = 0; i < cards.Length; i++)
     {
@@ -25,12 +23,25 @@
         </div>
     }
 </div>
+<hr />
+<button class="btn btn-primary" @onclick="ResetGame">Reset Game</button>
+<div class="d-flex justify-content-between">
+    <div>
+        <span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
+        <span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span>
+    </div>
+    <div>
+        <span>Attempts: @(Attempts)</span><br />
+        <span>Matches Made: @(MatchesMade)</span>
+    </div>
+</div>
 
 @code {
     private Card[] cards = Array.Empty<Card>();
     private Card? FirstSelectedCard = null;
     private Card? SecondSelectedCard = null;
     private int Attempts = 0;
+    private int MatchesMade = 0;
     private static string[] colors = new string[]
     {
        "Red", "Lime", "Blue", "Aqua", "Navy", "Teal", "Olive", "Maroon", "Fuchsia", "Yellow",
@@ -38,6 +49,18 @@
         "Indigo", "Violet", "Plum", "Khaki", "Peru", "Salmon", "Sienna", "Tan", "Thistle", "Tomato",
         "Turquoise", "Wheat"
     };
+    private void ResetGame()
+    {
+        foreach (var card in cards)
+        {
+            card.Reset();
+        }
+        cards = ShuffleCards(cards);
+        FirstSelectedCard = null;
+        SecondSelectedCard = null;
+        Attempts = 0;
+        MatchesMade = 0;
+    }
 
     protected override void OnInitialized()
     {
