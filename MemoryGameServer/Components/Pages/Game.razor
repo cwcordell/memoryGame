@@ -10,7 +10,7 @@
     @for (int i = 0; i < cards.Length; i++)
     {
         var card = cards[i];
-        <div id="@i" class="grid-item @(card.IsMatched ? "matched-card" : "")"
+        <div id="@i" class="grid-item @(card.IsMatched ? "matched-card" : "") @(card == FirstSelectedCard || card == SecondSelectedCard ? "card-selected" : "")"
             style="background-color: @(card.IsFlipped ? card.Color : "")" @onclick="() => CardClicked(card)">
             @if (card.IsFlipped)
             {
@@ -23,20 +23,19 @@
         </div>
     }
 </div>
+
 <hr />
-<button class="btn btn-primary" @onclick="ResetGame">Reset Game</button>
+
 <div class="d-flex justify-content-between">
-    <div>
-        <span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
-        <span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span>
-    </div>
-    <div>
-        <span>Attempts: @(Attempts)</span><br />
-        <span>Matches Made: @(MatchesMade)</span>
-    </div>
+    <button class="btn btn-primary" @onclick="ResetGame">Reset Game</button>
+    <span>Attempts: @(Attempts)</span><br />
+    <span>Matches Made: @(MatchesMade)</span>
+    <span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
+    <span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span>
 </div>
 
 @code {
+    private static int DeckSize = 64;
     private Card[] cards = Array.Empty<Card>();
     private Card? FirstSelectedCard = null;
     private Card? SecondSelectedCard = null;
@@ -65,12 +64,12 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        cards = ShuffleCards(GenerateCards(32));
+        cards = ShuffleCards(GenerateCards(DeckSize / 2));
     }
 
     private static Card[] GenerateCards(int count)
     {
-        Card[] cards = new Card[count * 2];
+        Card[] cards = new Card[DeckSize];
         Random random = new Random();
 
         for (int i = 0; i < count; i++)
@@ -96,13 +95,16 @@
         }
         return cards;
     }
+
     private void CardClicked(Card card)
     {
+        // If the card is already matched, do nothing
         if (card.IsMatched)
         {
             return;
         }
-        
+
+       // If the card was selected previously, retain it as the first selected card and flip the other card face-down 
         if (card.Id == FirstSelectedCard?.Id || card.Id == SecondSelectedCard?.Id)
         {
             if (FirstSelectedCard != null)
@@ -119,14 +121,19 @@
             SecondSelectedCard = null;
             return;
         }
-        
-        card.IsFlipped = !card.IsFlipped;
 
+       // Toggle the card's flipped state 
+        card.IsFlipped = true; 
+
+        // Handle matching for the first and second selected cards
         if (FirstSelectedCard == null)
         {
             FirstSelectedCard = card;
+            return;
         }
-        else if (SecondSelectedCard != null)
+        
+       // If the second card is selected, check if the colors match 
+        if (SecondSelectedCard != null)
         {
             FirstSelectedCard.IsFlipped = false;
             SecondSelectedCard.IsFlipped = false;
