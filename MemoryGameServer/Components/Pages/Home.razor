@@ -1,0 +1,27 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+
+<h1>Memory Game</h1>
+
+<div @onclick="ToggleDisplay" style="background-color: orange; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center;">
+    @if (isFlipped)
+    {
+        <div style="background-color: blue; text-align: center;">X</div>
+    }
+    else
+    {
+        <div style="background-color: grey; text-align: center;">?</div>
+    }
+</div>
+
+@code {
+    private bool isFlipped = false;
+
+    private void ToggleDisplay()
+    {
+        isFlipped = !isFlipped;
+    }
+}

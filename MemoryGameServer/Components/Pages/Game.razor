@@ -1,0 +1,140 @@
+﻿@page "/game"
+@rendermode InteractiveServer
+
+<PageTitle>Memory Game</PageTitle>
+
+<h1>Game</h1>
+<hr />
+<span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
+<span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span><br />
+<span>Attempts: @(Attempts)</span>
+<div class="grid-container">
+    @for (int i = 0; i < cards.Length; i++)
+    {
+        var card = cards[i];
+        <div id="@i" class="grid-item @(card.IsMatched ? "matched-card" : "")"
+            style="background-color: @(card.IsFlipped ? card.Color : "")" @onclick="() => CardClicked(card)">
+            @if (card.IsFlipped)
+            {
+                <span>@card.Color</span>
+            }
+            else
+            {
+                <span>?</span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private Card[] cards = Array.Empty<Card>();
+    private Card? FirstSelectedCard = null;
+    private Card? SecondSelectedCard = null;
+    private int Attempts = 0;
+    private static string[] colors = new string[]
+    {
+       "Red", "Lime", "Blue", "Aqua", "Navy", "Teal", "Olive", "Maroon", "Fuchsia", "Yellow",
+        "Green", "Cyan", "Purple", "Silver", "Pink", "Orange", "Gold", "Ivory", "Coral", "Beige",
+        "Indigo", "Violet", "Plum", "Khaki", "Peru", "Salmon", "Sienna", "Tan", "Thistle", "Tomato",
+        "Turquoise", "Wheat"
+    };
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        cards = ShuffleCards(GenerateCards(32));
+    }
+
+    private static Card[] GenerateCards(int count)
+    {
+        Card[] cards = new Card[count * 2];
+        Random random = new Random();
+
+        for (int i = 0; i < count; i++)
+        {
+            cards[i] = new Card { Id = i, Color = colors[i], IsFlipped = false };
+            cards[cards.Length - 1 - i] = new Card { Id = cards.Length - 1 - i, Color = colors[i], IsFlipped = false };
+        }
+
+        return cards;
+    }
+
+    private static Card[] ShuffleCards(Card[] cards)
+    {
+        Random random = new Random();
+        int n = cards.Length;
+        while (n > 1)
+        {
+            int k = random.Next(n);
+            n--;
+            Card temp = cards[n];
+            cards[n] = cards[k];
+            cards[k] = temp;
+        }
+        return cards;
+    }
+    private void CardClicked(Card card)
+    {
+        if (card.IsMatched)
+        {
+            return;
+        }
+        
+        if (card.Id == FirstSelectedCard?.Id || card.Id == SecondSelectedCard?.Id)
+        {
+            if (FirstSelectedCard != null)
+            {
+                FirstSelectedCard.IsFlipped = false;
+            }
+            if (SecondSelectedCard != null)
+            {
+                SecondSelectedCard.IsFlipped = false;
+            }
+            
+            FirstSelectedCard=card;
+            FirstSelectedCard.IsFlipped = true;
+            SecondSelectedCard = null;
+            return;
+        }
+        
+        card.IsFlipped = !card.IsFlipped;
+
+        if (FirstSelectedCard == null)
+        {
+            FirstSelectedCard = card;
+        }
+        else if (SecondSelectedCard != null)
+        {
+            FirstSelectedCard.IsFlipped = false;
+            SecondSelectedCard.IsFlipped = false;
+            FirstSelectedCard = card;
+            SecondSelectedCard = null;
+        }
+        else
+        {
+            SecondSelectedCard = card;
+            Attempts++;
+            if (FirstSelectedCard.Color == card.Color)
+            {
+                FirstSelectedCard.IsMatched = true;
+                card.IsMatched = true;
+                FirstSelectedCard = null;
+                SecondSelectedCard = null;
+            }
+        }
+    }
+
+    private class Card
+    {
+        public int Id { get; set; }
+        public string Color { get; set; } = "lightgrey";
+        public bool IsFlipped { get; set; } = false;
+        public bool IsMatched { get; set; } = false;
+
+        public void Reset()
+        {
+            IsFlipped = false;
+            IsMatched = false;
+        }
+    }
+}

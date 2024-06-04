@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/cory/Projects/github/infomagnus/im-copilot-sandbox/memorygame-csharp-wip/MemoryGameServer/obj/Debug/net8.0/scopedcss/projectbundle/MemoryGameServer.bundle.scp.css",
+      "PackagePath": "staticwebassets/MemoryGameServer.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/cory/Projects/github/infomagnus/im-copilot-sandbox/memorygame-csharp-wip/MemoryGameServer/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/cory/Projects/github/infomagnus/im-copilot-sandbox/memorygame-csharp-wip/MemoryGameServer/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/cory/Projects/github/infomagnus/im-copilot-sandbox/memorygame-csharp-wip/MemoryGameServer/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/cory/Projects/github/infomagnus/im-copilot-sandbox/memorygame-csharp-wip/MemoryGameServer/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.MemoryGameServer.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.MemoryGameServer.props",
+      "PackagePath": "build\\MemoryGameServer.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.MemoryGameServer.props",
+      "PackagePath": "buildMultiTargeting\\MemoryGameServer.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.MemoryGameServer.props",
+      "PackagePath": "buildTransitive\\MemoryGameServer.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
