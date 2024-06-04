@@ -10,7 +10,8 @@
     @for (int i = 0; i < cards.Length; i++)
     {
         var card = cards[i];
-        <div id="@i" class="grid-item @(card.IsMatched ? "matched-card" : "") @(card == FirstSelectedCard || card == SecondSelectedCard ? "card-selected" : "")"
+        <div id="@i" class="grid-item @(card.IsMatched ? "matched-card" : "")
+            @(card == FirstSelectedCard || card == SecondSelectedCard ? "card-selected" : "")"
             style="background-color: @(card.IsFlipped ? card.Color : "")" @onclick="() => CardClicked(card)">
             @if (card.IsFlipped)
             {
@@ -30,8 +31,9 @@
     <button class="btn btn-primary" @onclick="ResetGame">Reset Game</button>
     <span>Attempts: @(Attempts)</span><br />
     <span>Matches Made: @(MatchesMade)</span>
+    <span>Score: @(MatchesMade == 0 ? 0 : (int)(((float)MatchesMade / Attempts) * 100))</span>
     <span>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</span><br />
-    <span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span>
+    <span>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</span><br />
 </div>
 
 @code {
@@ -104,25 +106,22 @@
             return;
         }
 
-       // If the card was selected previously, retain it as the first selected card and flip the other card face-down 
-        if (card.Id == FirstSelectedCard?.Id || card.Id == SecondSelectedCard?.Id)
+        // Handle when the user clicks the FirstSelectedCard again without selecting a second card, do nothing
+        if (FirstSelectedCard != null && SecondSelectedCard == null && FirstSelectedCard == card)
         {
-            if (FirstSelectedCard != null)
-            {
-                FirstSelectedCard.IsFlipped = false;
-            }
-            if (SecondSelectedCard != null)
-            {
-                SecondSelectedCard.IsFlipped = false;
-            }
-            
-            FirstSelectedCard=card;
-            FirstSelectedCard.IsFlipped = true;
-            SecondSelectedCard = null;
             return;
         }
+        
+        // Handle the case where the two selected cards did not match on the previous turn
+        if (FirstSelectedCard != null && SecondSelectedCard != null)
+        {
+            FirstSelectedCard.IsFlipped = false;
+            SecondSelectedCard.IsFlipped = false;
+            FirstSelectedCard = null;
+            SecondSelectedCard = null;
+        }
 
-       // Toggle the card's flipped state 
+        // Toggle the card's flipped state 
         card.IsFlipped = true; 
 
         // Handle matching for the first and second selected cards
@@ -132,25 +131,17 @@
             return;
         }
         
-       // If the second card is selected, check if the colors match 
-        if (SecondSelectedCard != null)
+        // Handle when the second card is selected, check if the colors match, 
+        // update the attempts and matches made 
+        SecondSelectedCard = card;
+        Attempts++;
+        if (FirstSelectedCard.Color == SecondSelectedCard.Color)
         {
-            FirstSelectedCard.IsFlipped = false;
-            SecondSelectedCard.IsFlipped = false;
-            FirstSelectedCard = card;
+            FirstSelectedCard.IsMatched = true;
+            SecondSelectedCard.IsMatched = true;
+            FirstSelectedCard = null;
             SecondSelectedCard = null;
-        }
-        else
-        {
-            SecondSelectedCard = card;
-            Attempts++;
-            if (FirstSelectedCard.Color == card.Color)
-            {
-                FirstSelectedCard.IsMatched = true;
-                card.IsMatched = true;
-                FirstSelectedCard = null;
-                SecondSelectedCard = null;
-            }
+            MatchesMade++;
         }
     }
 
