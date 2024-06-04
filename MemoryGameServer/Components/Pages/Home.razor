@@ -4,24 +4,14 @@
 <PageTitle>Home</PageTitle>
 
 
-<h1>Memory Game</h1>
+<h1>Welcome to Memory Game!</h1>
 
-<div @onclick="ToggleDisplay" style="background-color: orange; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center;">
-    @if (isFlipped)
-    {
-        <div style="background-color: blue; text-align: center;">X</div>
-    }
-    else
-    {
-        <div style="background-color: grey; text-align: center;">?</div>
-    }
+<div class="game-description">
+    <p>
+        Memory Game is the adaptation of the classic memory card game. The game is set on a board with an even amount of cards placed in a grid face-down. Each turn consists of flipping two cards. If they match, they remain face up. If they don't, they will flip back over on the next selection. Once all of the matches have been found, you WIN! You may restart the game to try and better your score or challenge a friend!
+    </p>
 </div>
 
-@code {
-    private bool isFlipped = false;
+<a class="btn btn-primary" href="/game">Let's Play</a>
 
-    private void ToggleDisplay()
-    {
-        isFlipped = !isFlipped;
-    }
-}
+@code {}
