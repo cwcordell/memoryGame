@@ -9,7 +9,7 @@
 
 <div class="status-bar">
     <div class="status-bar-item">
-            Matches Made: @(MatchesMade)/@DeckSize
+            Matches Made: @(MatchesMade)/@(DeckSize/2)
     </div>
     <div class="status-bar-item">
             Score: @(MatchesMade == 0 ? 0 : (int)(((float)MatchesMade / Attempts) * 100))
