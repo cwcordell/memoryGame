@@ -6,20 +6,7 @@
 <h1>Memory Game</h1>
 
 <hr />
-
-<div class="status-bar">
-    <div class="status-bar-item">
-            Matches Made: @(MatchesMade)/@(DeckSize/2)
-    </div>
-    <div class="status-bar-item">
-            Score: @(MatchesMade == 0 ? 0 : (int)(((float)MatchesMade / Attempts) * 100))
-    </div>
-    <div class="status-bar-item">
-            Attempts: @(Attempts)
-    </div>
-</div>
-
-<div class="grid-container">
+<div class="gamescreen">
     @for (int i = 0; i < cards.Length; i++)
     {
         var card = cards[i];
@@ -38,22 +25,9 @@
     }
 </div>
 
-
-<button class="btn btn-primary" @onclick="ResetGame">Reset Game</button>
-@if (debug)
-{
-<div class="status-bar">
-    <div class="status-bar-item">
-        <h4>First Selected Card: @(FirstSelectedCard != null ? FirstSelectedCard.Color : "none")</h4>
-    </div>
-    <div class="status-bar-item">
-        <h4>Second Selected Card: @(SecondSelectedCard != null ? SecondSelectedCard.Color : "none")</h4>
-    </div>
-</div>
-}
 @code {
     private bool debug = true;
-    private static int DeckSize = 64;
+    private static int DeckSize = 16;
     private Card[] cards = Array.Empty<Card>();
     private Card? FirstSelectedCard = null;
     private Card? SecondSelectedCard = null;
